@@ -1,5 +1,7 @@
 'use strict'
 
+const { promisify } = require('util')
+
 const { Api } = require('bfx-wrk-api')
 
 const {
@@ -27,6 +29,7 @@ const {
   getFundingCreditHistoryCsvJobData,
   getMultipleCsvJobData
 } = require('./helpers/get-csv-job-data')
+const changePositionHistory = require('./helpers/change-position-history')
 
 class ReportService extends Api {
   space (service, msg) {
@@ -173,7 +176,21 @@ class ReportService extends Api {
         'symbol'
       )
 
-      cb(null, res)
+      if (
+        !Array.isArray(res.res) ||
+        res.res.length === 0
+      ) {
+        cb(null, res)
+
+        return
+      }
+
+      const positions = await changePositionHistory(this, args, res.res)
+
+      cb(null, {
+        ...res,
+        res: positions
+      })
     } catch (err) {
       this._err(err, 'getPositionsHistory', cb)
     }
@@ -526,6 +543,14 @@ class ReportService extends Api {
     } catch (err) {
       this._err(err, 'getFundingCreditHistoryCsv', cb)
     }
+  }
+
+  _getTrades (args) {
+    return promisify(this.getTrades.bind(this))(null, args)
+  }
+
+  _getLedgers (args) {
+    return promisify(this.getLedgers.bind(this))(null, args)
   }
 
   _err (err, caller, cb) {

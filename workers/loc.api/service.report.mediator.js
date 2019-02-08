@@ -714,14 +714,6 @@ class MediatorReportService extends ReportService {
     return promisify(super.getPositionsHistory.bind(this))(null, args)
   }
 
-  _getLedgers (args) {
-    return promisify(super.getLedgers.bind(this))(null, args)
-  }
-
-  _getTrades (args) {
-    return promisify(super.getTrades.bind(this))(null, args)
-  }
-
   _getPublicTrades (args) {
     return promisify(super.getPublicTrades.bind(this))(null, args)
   }
