@@ -47,7 +47,7 @@ describe('Queue', () => {
   before(async function () {
     this.timeout(20000)
 
-    mockRESTv2Srv = createMockRESTv2SrvWithDate(start, end, 10000)
+    mockRESTv2Srv = createMockRESTv2SrvWithDate(start, end, 100)
 
     await rmAllFiles(tempDirPath)
     await rmDB(dbDirPath)
