@@ -20,6 +20,7 @@ module.exports = async (
     if (
       !symbol ||
       typeof symbol !== 'string' ||
+      /tBFX/gi.test(symbol) ||
       !Number.isInteger(end) ||
       !Number.isInteger(id)
     ) {
