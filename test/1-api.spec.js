@@ -422,40 +422,6 @@ describe('API', () => {
     ])
   })
 
-  it('it should be successfully performed by the getWallets method', async function () {
-    this.timeout(5000)
-
-    const res = await agent
-      .post(`${basePath}/get-data`)
-      .type('json')
-      .send({
-        auth,
-        method: 'getWallets',
-        params: {
-          end
-        },
-        id: 5
-      })
-      .expect('Content-Type', /json/)
-      .expect(200)
-
-    assert.isObject(res.body)
-    assert.propertyVal(res.body, 'id', 5)
-    assert.isArray(res.body.result)
-
-    const resItem = res.body.result[0]
-
-    assert.isObject(resItem)
-    assert.containsAllKeys(resItem, [
-      'type',
-      'currency',
-      'balance',
-      'unsettledInterest',
-      'balanceAvailable',
-      'mtsUpdate'
-    ])
-  })
-
   it('it should be successfully performed by the getWallets method, without params', async function () {
     this.timeout(5000)
 
@@ -1387,21 +1353,26 @@ describe('API', () => {
 
     assert.isObject(res.body)
     assert.propertyVal(res.body, 'id', 5)
-    assert.isObject(res.body.result)
-    assert.containsAllKeys(res.body.result, [
-      'time',
-      'status',
-      'is_locked',
-      'trade_vol_30d',
-      'fees_funding_30d',
-      'fees_funding_total_30d',
-      'fees_trading_30d',
-      'fees_trading_total_30d',
-      'maker_fee',
-      'taker_fee',
-      'deriv_maker_rebate',
-      'deriv_taker_fee'
-    ])
+    assert.isArray(res.body.result)
+    assert.lengthOf(res.body.result, 1)
+
+    res.body.result.forEach((res) => {
+      assert.isObject(res)
+      assert.containsAllKeys(res, [
+        'time',
+        'status',
+        'is_locked',
+        'trade_vol_30d',
+        'fees_funding_30d',
+        'fees_funding_total_30d',
+        'fees_trading_30d',
+        'fees_trading_total_30d',
+        'maker_fee',
+        'taker_fee',
+        'deriv_maker_rebate',
+        'deriv_taker_fee'
+      ])
+    })
   })
 
   it('it should be successfully performed by the getLogins method', async function () {

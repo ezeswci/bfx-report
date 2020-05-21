@@ -206,11 +206,8 @@ class ReportService extends Api {
       checkParams(args, 'paramsSchemaForWallets')
 
       const rest = this._getREST(args.auth)
-      const { end } = { ...args.params }
 
-      return end
-        ? rest.walletsHistory(end)
-        : rest.wallets()
+      return rest.wallets()
     }, 'getWallets', cb)
   }
 
@@ -435,7 +432,9 @@ class ReportService extends Api {
       const { auth } = { ...args }
       const rest = this._getREST(auth)
 
-      return rest.accountSummary()
+      const res = await rest.accountSummary()
+
+      return Array.isArray(res) ? res : [res]
     }, 'getAccountSummary', cb)
   }
 
