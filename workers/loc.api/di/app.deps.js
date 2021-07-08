@@ -30,6 +30,7 @@ module.exports = ({
   processorQueue,
   aggregatorQueue,
   deflateFac,
+  grcSlackFac,
   link
 }) => {
   return new ContainerModule((bind) => {
@@ -98,6 +99,9 @@ module.exports = ({
     bind(TYPES.DeflateFac).toConstantValue(
       deflateFac
     )
+    bind(TYPES.GrcSlackFac).toConstantValue(
+      grcSlackFac
+    )
     bind(TYPES.CsvJobData)
       .to(CsvJobData)
       .inSingletonScope()
@@ -108,7 +112,8 @@ module.exports = ({
           TYPES.ProcessorQueue,
           TYPES.HasGrcService,
           TYPES.CsvJobData,
-          TYPES.RService
+          TYPES.RService,
+          TYPES.RootPath
         ]
       ))
     bind(TYPES.WriteDataToStream).toConstantValue(
